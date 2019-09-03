@@ -1,0 +1,38 @@
+{% extends _layout %}
+
+{% block content %}
+	<h1 class="status">
+		Em manutenção
+	</h1>
+	<br />
+	<p>
+		No momento, nós estamos trabalhando numa loja incrível para você.
+	</p>
+	<p>
+		Fique por dentro das novidades e seja avisado assim que estivermos no ar.
+	</p>
+
+	{{ form_open('contact/newsletter_signup') }}
+		{% if flashdata.error %}
+			<div class="alert alert-danger">{{ flashdata.error }}</div>
+		{% endif %}
+		{% if flashdata.message %}
+			<div class="alert alert-success">{{ flashdata.message }}</div>
+		{% endif %}
+		{% if validation_errors() %}
+			<div class="alert alert-danger">{{ validation_errors() }}</div>
+		{% endif %}
+		<div class="newsletter">
+			<input type="hidden" value="{{ current_url() }}" name="redirect"/>
+			<input type="email" name="email" value="" placeholder="Fique por dentro. Entre com seu e-mail aqui" />
+			<input type="submit" value="Cadastrar" class="btn btn-primary" />
+		</div>
+	</form>
+{% endblock %}
+
+{% block head %}
+	{% set favicon_link = template_settings('image:favicon') ? host_url('uploads/images/full/' ~ template_settings('image:favicon')) : theme_img('favicon.png') %}
+    <!--[if IE]><link rel="shortcut icon" href="{{ theme_img('favicon.ico') }}"><![endif]-->
+    <link rel="icon" href="{{ favicon_link }}">
+    <link rel="apple-touch-icon" href="{{ favicon_link }}">
+{% endblock %}

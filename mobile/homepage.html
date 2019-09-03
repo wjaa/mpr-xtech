@@ -1,0 +1,36 @@
+{% extends _layout %}
+
+{% block content %}
+
+<div class="body index">
+	<div id="index" class="clearfix">
+		<section class="slider">
+			<div id="slider" class="flexslider">
+				<ul class="slides">
+					{% for banner in banners %}
+						<li>
+							{{ linked_banner(banner) }}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</section>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(window).load(function(){
+	$('#slider').flexslider({
+		animation: "fade",
+		slideshow: true,
+		slideshowSpeed: 5000,
+		controlNav: true,
+		directionNav: false,
+		start: function(slider){
+			$('body').removeClass('loading');
+		}
+	});
+});
+</script>
+
+{% endblock %}

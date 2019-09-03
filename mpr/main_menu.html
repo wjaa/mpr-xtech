@@ -1,0 +1,220 @@
+<div class="d-flex-phone j-content-between align-center">
+    <button class="menu-fechar ">
+        <span class='line'></span>
+        <span class='line'></span>
+    </button>
+   
+ 
+    <div class="top-links d-flex align-center">
+        <a href="{{ site_url('secure/my_account') }}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="7982.999 1105 16.895 16.894"><path class="a" d="M-11322.548-1095.071v-2.113c0-2.809,5.63-4.221,8.447-4.221s8.447,1.412,8.447,4.221v2.113Zm4.222-12.668a4.225,4.225,0,0,1,4.226-4.225,4.224,4.224,0,0,1,4.221,4.225,4.223,4.223,0,0,1-4.221,4.221A4.224,4.224,0,0,1-11318.326-1107.739Z" transform="translate(19305.548 2216.964)"/></svg>
+        </a>
+        
+        {% if logged_in %}
+          
+            <a href="{{ site_url('secure/logout') }}">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="11387.438 5320 19.601 16"><path id="Union_80" data-name="Union 80" class="cls-1" d="M362.053-1095.964a3.467,3.467,0,0,1-2.544-1.057,3.467,3.467,0,0,1-1.056-2.543v-8.8a3.468,3.468,0,0,1,1.056-2.543,3.467,3.467,0,0,1,2.544-1.056h4a.384.384,0,0,1,.281.119.384.384,0,0,1,.119.281c0,.033,0,.117.012.25a3.251,3.251,0,0,1,.006.331,2.07,2.07,0,0,1-.038.293.411.411,0,0,1-.125.244.375.375,0,0,1-.256.081h-4a1.926,1.926,0,0,0-1.413.588,1.925,1.925,0,0,0-.588,1.412v8.8a1.925,1.925,0,0,0,.588,1.412,1.924,1.924,0,0,0,1.413.588h3.9l.144.013q.144.012.144.037c0,.016.033.039.1.068s.1.067.087.113a.324.324,0,0,0,.025.169c0,.034,0,.117.012.25a3,3,0,0,1,.006.331,2.152,2.152,0,0,1-.037.294.415.415,0,0,1-.125.244.38.38,0,0,1-.256.081Zm7.838-.637a.768.768,0,0,1-.238-.563v-3.6h-5.6a.769.769,0,0,1-.563-.238.767.767,0,0,1-.238-.562v-4.8a.769.769,0,0,1,.238-.562.77.77,0,0,1,.563-.238h5.6v-3.6a.771.771,0,0,1,.237-.563.771.771,0,0,1,.563-.237.769.769,0,0,1,.562.237l6.8,6.8a.77.77,0,0,1,.238.563.769.769,0,0,1-.238.563l-6.8,6.8a.77.77,0,0,1-.563.238A.768.768,0,0,1,369.891-1096.6Z" transform="translate(11028.985 6431.964)"/></svg>            
+            </a>
+        
+        {% endif %}
+        
+         <a href="{{ site_url('cart/view_cart') }}" class="meu-carrinho">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="8140 1105 15.86 16"><path class="a" d="M6886.6,83a1.368,1.368,0,0,1-1.255-.967l-2.333-9.5a.25.25,0,0,1,.254-.324h3.577v.832a1.334,1.334,0,0,0,2.667,0V72.21h2.883v.832a1.333,1.333,0,0,0,2.667,0V72.21h3.54a.25.25,0,0,1,.254.324l-2.332,9.5a1.369,1.369,0,0,1-1.255.967Zm6.461-9.959v-2.6a2.109,2.109,0,0,0-4.217,0v2.6a.667.667,0,0,1-1.333,0v-2.6a3.442,3.442,0,0,1,6.883,0v2.6a.666.666,0,1,1-1.333,0Z" transform="translate(1257 1037.999)"/></svg>
+            <span id="view_cartTotalItens">{% if cart('total_items') %} {{ cart('total_items') }} {% else %} 0 {% endif %} </span>
+        </a>
+  </div>
+
+</div>
+
+<nav class="navbar navbar-default" role="navigation">
+
+     <ul class="nav navbar-nav hidden-phone">
+    {% for page in get_children_of_page('topo-esquerda') %}
+        <li>
+            <a href="{{ page.url is empty ? site_url(page.slug) : page.url }}" {{ page.new_window ? 'target="_blank"':''}}>
+                <h2>{{ page.title }}</h2>
+            </a>
+        </li>
+    {% endfor %}
+    {% for cat in categories %}
+        {% if cat.category.slug != 'home' %}
+            {% if cat.children|count > 0 and template_settings('select:menu_dropdown') > 0 %}
+                <li class="dropdown" onmouseover="$(this).addClass('open');" onmouseout="$(this).removeClass('open');">
+                    <a href="{{ site_url(cat.category.slug) }}">
+                        <h2>{{ cat.category.name }}</h2>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% set limiter = 0 %}
+                        {% for child in cat.children %}
+                            {% if child.children|count > 0 and template_settings('select:menu_dropdown') == 2 %}
+                                <li class="dropdown" onmouseover="$(this).addClass('open');" onmouseout="$(this).removeClass('open');">
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                        <b class="sub-caret"></b>
+                                    </a>
+                        
+                                    <ul class="dropdown-submenu">
+                                        {% for newChild in child.children %}
+                                            <li>
+                                                <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug ~'/'~ newChild.category.slug) }}">
+                                                    {{ newChild.category.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% elseif template_settings('text:quantity_dropdown') > 2 %}
+                                {% set limiter = limiter + 1 %}
+                                {% if limiter == 1 %}
+                                    <li class="block-list-limiter">
+                                        <ul class="list-limiter">
+                                {% endif %}
+                                <li>
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                    </a>
+                                </li>
+                                
+                                {% if limiter == template_settings('text:quantity_dropdown') or  cat.children|length == loop.index %}
+                                        {% set limiter = 0 %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                                                    
+                            {% else %}
+                                <li>
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ site_url(cat.category.slug) }}">
+                        <h2>{{ cat.category.name }}</h2>
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% for page in get_children_of_page('topo-direita') %}
+        <li>
+            <a href="{{ page.url is empty ? site_url(page.slug) : page.url }}" {{ page.new_window ? 'target="_blank"':''}}>
+                <h2>{{ page.title }}</h2>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    
+    <ul class="nav navbar-nav visible-phone">
+    {% for page in get_children_of_page('topo-esquerda') %}
+        <li>
+            <a href="{{ page.url is empty ? site_url(page.slug) : page.url }}" {{ page.new_window ? 'target="_blank"':''}}>
+                <h2>{{ page.title }}</h2>
+            </a>
+        </li>
+    {% endfor %}
+    {% for cat in categories %}
+        {% if cat.category.slug != 'home' %}
+            {% if cat.children|count > 0 and template_settings('select:menu_dropdown') > 0 %}
+                <li class="dropdown">
+                    <a href="{{ site_url(cat.category.slug) }}">
+                        <h2>{{ cat.category.name }}</h2>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% set limiter = 0 %}
+                        {% for child in cat.children %}
+                            {% if child.children|count > 0 and template_settings('select:menu_dropdown') == 2 %}
+                                <li class="dropdown">
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                        <b class="sub-caret"></b>
+                                    </a>
+                        
+                                    <ul class="dropdown-submenu">
+                                        {% for newChild in child.children %}
+                                            <li>
+                                                <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug ~'/'~ newChild.category.slug) }}">
+                                                    {{ newChild.category.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% elseif template_settings('text:quantity_dropdown') > 2 %}
+                                {% set limiter = limiter + 1 %}
+                                {% if limiter == 1 %}
+                                    <li class="block-list-limiter">
+                                        <ul class="list-limiter">
+                                {% endif %}
+                                <li>
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                    </a>
+                                </li>
+                                
+                                {% if limiter == template_settings('text:quantity_dropdown') or  cat.children|length == loop.index %}
+                                        {% set limiter = 0 %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                                                    
+                            {% else %}
+                                <li>
+                                    <a href="{{ site_url(cat.category.slug ~ '/' ~ child.category.slug) }}">
+                                        {{ child.category.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ site_url(cat.category.slug) }}">
+                        <h2>{{ cat.category.name }}</h2>
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% for page in get_children_of_page('topo-direita') %}
+        <li>
+            <a href="{{ page.url is empty ? site_url(page.slug) : page.url }}" {{ page.new_window ? 'target="_blank"':''}}>
+                <h2>{{ page.title }}</h2>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+</nav>
+
+<div id="phone-search" class="visible-phone">
+    {# Busca #} {{ form_open('cart/search', {id: "form-phone-search"}) }}
+    <div class="input-group search">
+        <input type="text" name="term" id="phone-search-engine" class="form-control" placeholder="Encontre aqui…" autocomplete="off" />
+
+        <button class="btn btn-default" type="button">
+            <i class="glyphicon glyphicon-search"></i>
+        </button>
+
+    </div>
+    {{ form_close() }}
+</div>
+
+{% if template_settings('text:quantity_dropdown') > 0 and template_settings('select:menu_dropdown') < 2  %}
+<script>
+    $(document).ready(function(){
+        $('.dropdown-menu').each(function(){
+            var colunas = $(this).find('.block-list-limiter').length;
+            $(this).css('width', (colunas*{{template_settings('text:width_dropdown')}})+'px');
+        }); 
+        $('.block-list-limiter').css('width','{{template_settings('text:width_dropdown')}}px');
+    });
+</script>
+{% endif %}

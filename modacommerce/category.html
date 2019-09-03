@@ -1,0 +1,70 @@
+{% extends _layout %}
+
+{% block content %}
+
+{% import 'product_listing.html' as product_listing %}
+
+{% if categories[category.root_category].children|count > 0 %}
+
+{% set cols = 4 %}
+
+<div class="row">
+	<div class="col-xs-3 sidebar">
+		<div class="sidebar-column">
+			<div class="sidebar-column-in">
+				<h4>
+					{{ categories[category.root_category].category.name }}
+				</h4>
+				<ul class="nav nav-pills nav-stacked">
+					{% for category_group in categories[category.root_category].children %}
+					    <li class="{{ category_group.category.id == category.id ? 'active' : 'inactive' }}">
+					    	<a href="{{ site_url(categories[category.root_category].category.slug ~ '/' ~ category_group.category.slug) }}">{{ category_group.category.name }}</a>
+					    	<ul class="children-subcategory nav nav-pills nav-stacked">
+					    	{% for subcategory_group in category_group.children %}
+					    		<li>
+					    			<a href="{{ site_url(categories[category.root_category].category.slug ~ '/' ~ category_group.category.slug ~ '/' ~ subcategory_group.category.slug) }}">
+					    				{{ subcategory_group.category.name }}
+					    			</a>
+					    		</li>
+					    	{% endfor %}
+					    	</ul>
+					    </li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xs-9">
+
+{% endif %}
+
+<div class="pull-right">
+	{{ filters_widget() }}
+</div>
+{{ breadcrumbs_widget() }}
+
+<div class="row prod-list">
+	{% for product in products %}
+		{{ product_listing.item(product, category, cols|default(3)) }}
+	{% else %}
+		<div class="col-md-12">
+			Não há produtos nesta categoria.
+		</div>
+	{% endfor %}
+
+	{# Paginacao #}
+	<div class="col-xs-12 text-center">
+		{{ pagination() }}
+	</div>
+</div>
+
+{% if categories[category.root_category].children|count > 0 %}
+
+	</div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

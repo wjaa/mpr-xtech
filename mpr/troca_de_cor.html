@@ -1,0 +1,151 @@
+{% if template_settings('color:cor_primaria') %}
+/* cor primaria */
+
+section#topbar,
+#carousel .carousel-indicators li.active,
+#store-content .block-header:after,
+#store-content .product-list-item .prod-wrapper .prod-info .slash:before,
+section#store-content .prod-wrapper .prod-action a,
+#product .showcase .off,
+.contBuy,
+.contBuy:hover,
+.contBuy:focus,
+#cartview #checkout_summary table tbody td .btn-danger,
+#cartview .summary .cart-coupon .btn-default,
+#store-content .checkout .btn.btn-search-address,
+.newsletter-assinar,
+.newsletter-assinar:focus,
+.newsletter-assinar:active,
+footer .social-icons,
+footer .bt-conferir,
+footer .bt-conferir:focus,
+footer .bt-conferir:active,
+body #topcontrol .top_button,
+body #topcontrol .top_button:hover,
+body #topcontrol .top_button:focus,
+div#instagram h2:after,
+#popup button[type='submit'],
+#popup button[type='submit']:hover,
+#exit_popup button[type='submit'],
+#exit_popup button[type='submit']:hover,
+footer .bt-conferir:hover,
+.prod-share .at-share-btn,
+section#store-content .btn-primary,
+#store-content .product-list-item .off{
+	background: {{ template_settings('color:cor_primaria') }} !important;
+}
+
+header #menu .navbar-nav>li a h2:hover,
+#store-content .product-list-item .add-to-wishlist .btn-primary:hover,
+#store-content #prod-relateds .add-to-wishlist .btn-primary:hover,
+.myaccount #mywishlist .sale,
+#store-content .prod-wrapper .prod-info p .sale,
+div#instagram h2 a,
+footer .bt-conferir,
+footer .block.links ul li a:hover,
+section#flash .alert .close-alert{
+    color: {{ template_settings('color:cor_primaria') }} !important;
+}
+
+section#store-content #product .prod-image-thumbs a,
+footer .bt-conferir{
+    border-color: {{ template_settings('color:cor_primaria') }} !important;
+}
+
+.newsletter-rodape .icon,
+#instagram .icon .cls-1{
+    fill: {{ template_settings('color:cor_primaria') }} !important;
+}
+
+
+footer .bt-conferir,
+#store-content .product-list-item .add-to-wishlist .btn-primary, 
+#store-content .product-list-item .add-to-wishlist .btn-primary:focus, 
+#store-content #prod-relateds .add-to-wishlist .btn-primary, 
+#store-content #prod-relateds .add-to-wishlist .btn-primary:focus{
+    background: transparent !important;
+}
+
+section#store-content #product .prod-action .buy-btn{
+    background: #54C359 !important;
+}
+
+section#store-content #product .prod-action .buy-btn:hover{
+    background: #378e3c !important;
+}
+
+
+section#store-content #product .add-to-wishlist button{
+    background: #F2F2F2 !important;
+}
+
+section#store-content #product .add-to-wishlist button:hover,
+#store-content #product .frete .btn{
+    background: #4D4D4D !important;
+}
+
+footer .bt-conferir:hover,
+footer .bt-conferir:focus, 
+footer .bt-conferir:active{
+    color: #fff !important;
+}
+
+
+
+
+@media only screen and (max-width: 990px) {
+    #menu #view_cartTotalItens{
+        background: {{ template_settings('color:cor_primaria') }} !important;
+    }
+}
+
+{% endif %}
+
+
+
+{% if template_settings('color:cor_background') %}
+/* background */
+
+body,
+header,
+#menu,
+#store-content .block-header span,
+footer .block {
+    background: {{ template_settings('color:cor_background') }} !important;
+}
+{% endif %}
+
+
+{% if template_settings('color:cor_titulo') %}
+/* titulos */
+#store-content .block-header span,
+footer h4,
+div#instagram span,
+.category-header,
+section#store-content .sidebar .side-header,
+section#store-content .cat_options .filters li:first-child,
+section#store-content .sidebar .active-filters a,
+.myaccount .sidebar #mytabs li.active a,
+.myaccount .category-header{
+    color: {{ template_settings('color:cor_titulo') }} !important;
+}
+{% endif %}
+
+
+{% if template_settings('color:cor_link_texto') %}
+/* textos  e links */
+.newsletter-rodape .texto-newsletter,
+footer .sobre-a-loja,
+footer p, 
+footer small, 
+footer .config ul li, 
+footer .links ul li, 
+footer .copyright,
+header #menu .navbar-nav>li a h2,
+footer .block.links ul li a,
+section#store-content .cat_options .filters li a,
+section#store-content .sidebar ul li.child a,
+.myaccount .sidebar #mytabs li a{
+    color: {{ template_settings('color:cor_link_texto') }} !important;
+}
+{% endif %}

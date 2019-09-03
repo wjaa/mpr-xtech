@@ -1,0 +1,429 @@
+{% extends _layout %}
+
+{% block content %}
+    {% import 'mobile_new/product_listing.html' as product_listing %}
+
+    <div id="product" itemtype="http://schema.org/Product">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="showcase">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h1 class="page-title" itemprop="name">
+                                {{ product.name }}
+                            </h1>
+                        </div>
+                    </div>
+
+                    {% if product.sku %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="prod-ref">
+                                {{ 'Ref.:'|trans({'en':'SKU'}) }}
+                                <span itemprop="sku">
+                                    {{ product.sku }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <section class="slider">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div id="slider" class="product-flexslider">
+                                            <ul class="slides">
+                                                {% for image in product.images %}
+                                                <li>
+                                                    <img src="{{ host_url('uploads/images/medium/' ~ image.filename) }}" alt="{{ image.alt }}" title="{{ product.name }}" />
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if product.images|length > 1 %}
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div id="carousel" class="product-flexslider prod-image-thumbs">
+                                            <ul class="slides">
+                                                {% for image in product.images %}
+                                                <li>
+                                                    <a href='javascript: void(0);' data-image='{{ theme_upload_url('images/medium/' ~ image.filename) }}' class="{% if loop.first %}active{% endif %} opt-{{ image.options|default('no') }}" >
+                                                        <img src="{{ host_url('uploads/images/thumbnails/' ~ image.filename) }}" alt="{{ image.alt }}" title="{{ product.name }}" />
+                                                    </a>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if product.excerpt %}
+                            <div class="prod-excerpt">
+                                <p>{{ product.excerpt|nl2br }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {{ wishlist_button('<i class="fa fa-heart"></i>&nbsp;&nbsp;'~'Lista de Desejo'|trans({'en':'Wishlist'}), product, '', true) }}
+
+                            <script>
+                                $('.add-to-wishlist').find('button').removeClass('btn-sm btn-default buy-btn').addClass('btn-primary').addClass('btn-block');
+                            </script>
+                        </div>
+                    </div>
+
+                    {% if product.lookable %}
+                        {% include 'mobile_new/_look.html' %}
+                    {% else %}
+                        {{ form_open('cart/add_to_cart', 'class="form-horizontal buy-btn-form"') }}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="hide">{{ variation_select(product, {button_selects: 'true'}) }}</div>
+
+                                    <script type="text/javascript">
+
+                                        s_weight = {
+                                            {% for variant in product.variants %}
+                                                {{ variant.id }}: {{ variant.weight }},
+                                            {% endfor %}
+                                        }
+
+                                        productvariants_settings_{{ product.id }}.validationSuccess = function() {
+                                            var s_id = this['selected_variant']['id'];
+                                            var c_weight = s_weight[s_id];
+
+                                            if (c_weight > 0) {
+                                                $('input[name=product_weight]').val(c_weight);
+                                            }
+
+                                            $('.installment-price').text('R$ ' + (parseFloat(this.selected_variant.price_num) / {{ product.installments }}).toFixed(2).replace('.', ','));
+                                            $('.estoque').show();
+                                            $('.estoque span').html(parseInt(this.selected_variant.quantity));
+                                            $('#buy-btn').show();
+                                            variant_pay_discount(this.selected_variant);
+                                        }
+                                        
+                                        $( document ).ready(function() {
+                                        
+                                            productvariants_settings_{{ product.id }}.validationNotAvailable = function(){
+                                                variant_unavailable();
+                                                variant_pay_discount(this.selected_variant);
+                                            }
+
+                                            productvariants_settings_{{ product.id }}.validationOutofstock = function(){
+                                                variant_unavailable();
+                                                variant_pay_discount(this.selected_variant);
+                                            }
+
+                                            var variant_unavailable = function(){
+                                                $('#buy-btn').hide();
+                                                $('.buy-message').hide();
+                                                $('.estoque').hide();
+                                                $('.alert-unavailable').removeClass('hide');
+                                            }
+                                        });
+                                    </script>
+
+                                    {% if product.options|count > 0 %}
+                                    <div class="prod-variants clearfix">
+                                        <ul>
+                                            {% for option in product.options %}
+                                            <li class="prod-variant-li clearfix">
+                                                <div class="prod-variant">
+                                                    <span class="prod-variant-title">
+                                                        {{ 'Selecione a opção para'|trans({'en':'Select a option for'}) }}
+                                                        <span class="color">{{option.name}}:</span>
+                                                    </span>
+
+                                                    <ul class="list-inline">
+                                                        {% for value in option.values %}
+                                                            {% if value.color %}
+                                                            <li class="l-color">
+                                                                <button data-id="{{value.id}}" id="filter_{{ value.id }}" class="sub f-color prod-variant-btn prod-variant-color" href="#filter_{{ option.id }}" title="{{ options[0] }}">
+                                                                    <span class="s-color" style="background: {{ value.color }};"></span>
+                                                                </button>
+                                                            </li>
+                                                            {% else %}
+                                                            <li>
+                                                                <button class="sub btn btn-default prod-variant-btn" data-id="{{value.id}}">{{value.name}}</button>
+                                                            </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+
+                                        {% for option in options %}
+                                            {% if option.id in product.available_options %}
+                                                {% if option.type == 'textarea' %}
+                                                    <label>{{ option.name }}</label>
+
+                                                    <textarea class="form-control" name="option[{{ option.id }}]"></textarea>
+                                                {% elseif option.type == 'textfield' %}
+                                                    <label>{{ option.name }}</label>
+
+                                                    <input class="form-control" name="option[{{ option.id }}]">
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+
+                                    <script>
+                                    function change_pic (option) {
+                                        $variation_photo = $('.opt-' + option);
+                                        $variation_photo_first = $('.opt-' + option + ':first');
+                                        $variation_photo_global = $('.opt-no');
+                                        $variation_not = $('.prod-image-thumbs a');
+
+                                        $variation_photo_first.trigger('click');
+                                        $variation_not.hide();
+                                        $variation_photo.show();
+                                        $variation_photo_global.show();
+                                    }
+
+                                    $('.prod-variant-btn').click(function(e){
+                                        change_pic($(this).data('id'));
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    {% if product.price > 0 %}
+                                    <div class="prod-action">
+                                        <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                                            <strong class="buy-price">
+                                                {% if product.saleprice > 0 %}
+                                                <span class="slash product_price">{{ product.price|format_currency }}</span>
+                                                <span class="sale color product_price" itemprop="price">{{ product.saleprice|format_currency }}</span>
+                                                <span class="sale color variant_price" style="display: none;">{{ product.saleprice|format_currency }}</span>
+                                                {% else %}
+                                                <span class="sale color product_price" itemprop="price">{{ product.price|format_currency }}</span>
+                                                <span class="sale color variant_price" style="display: none;">{{ product.price|format_currency }}</span>
+                                                {% endif %}
+                                            </strong>
+
+                                            {% set product_price = product.saleprice > 0 ? product.saleprice : product.price %}
+
+                                            {% if product.installments > 1 %}
+                                            <span class="installments-price">
+                                                {{ 'Em até '|trans({'en':'or '}) }}<strong class="color">{{ product.installments }}x</strong>
+                                                {{ 'de'|trans({'en':'of'}) }} <strong class="color installment-price">{{ (product_price/product.installments)|format_currency }}</strong>
+                                                <span>{{ 'sem juros '|trans({'en':''}) }}</span>
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div style="display:none">
+                                        <input type="hidden" name="cartkey" value="">
+                                        <input type="hidden" name="id" value="{{ product.id }}">
+                                        <input type="hidden" name="variant_id" value="">
+                                    </div>
+
+                                    <button id="buy-btn" class="btn btn-primary btn-block btn-lg buy-btn" type="submit" value="submit">
+                                        <i class="fa fa-shopping-cart"></i> {{ 'Comprar'|trans({'en':'Buy'}) }}
+                                    </button>
+
+                                    <p class="buy-message hide">Escolha uma opção</p>
+
+                                    <div class="alert-unavailable alert alert-danger hide">Produto indisponível</div>
+
+                                    {% if product.track_stock == 1 and product.quantity <= 0 %}
+                                    <script type="text/javascript">
+                                        $(document).ready(function(){
+                                            $('#buy-btn').hide();
+                                        });
+                                    </script>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {{ form_open('contact/remind_me', 'class="remindme-form hide form-horizontal"', {'redirect': site_url(uri_string()), 'variant_id': '', 'product_id': product.id}) }}
+                                <fieldset>
+                                    <label for="email">
+                                        {{ lang('remind_me_when_available') }}
+                                    </label>
+
+                                    <div class="input-group">
+                                        <input type="text" name="email" class="form-control" placeholder="Email" />
+                                        <span class="input-group-btn">
+                                            <input type="submit" value="{{ 'Enviar'|trans({'en':'Send'}) }}" name="submit" class="btn btn-primary"/>
+                                        </span>
+                                    </div>
+                                </fieldset>
+                            {{ form_close() }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="prod-share">
+                                Indique este produto:
+                                <!-- Go to www.addthis.com/dashboard to customize your tools -->
+                                <div class="addthis_sharing_toolbox"></div>
+                                <script type="text/javascript">var addthis_config = {"data_track_addressbar":false, ui_language: "pt"};</script>
+                                <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-570c00638e25a472"></script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculo de frete -->
+                    {% if current_lang() == 'portugues' %}
+                        {{ shipping_widget() }}
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if product.description or product.properties|count > 0 or testimonials|count > 0 %}
+                                <div class="prod-description">
+                                    <ul class="nav nav-tabs">
+                                        {% if product.description %}
+                                            <li class="active">
+                                                <a href="#tab-description" data-toggle="tab">{{ 'Descrição'|trans({'en':'Description'}) }}</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if product.properties|count > 0 %}
+                                            <li>
+                                                <a href="#tab-properties" data-toggle="tab">{{ 'Características'|trans({'en':'Properties'}) }}</a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% if testimonials|count > 0 %}
+                                            <li {{ product.description ? '' : 'class="active"'}}>
+                                                <a href="#tab-testimonials" data-toggle="tab">Depoimentos</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        {% if product.description %}
+                                            <div class="tab-pane active" id="tab-description">
+                                                {{ product.description|raw }}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if product.properties|count > 0 %}
+                                            <div class="tab-pane clearfix" id="tab-properties">
+                                                {% for prop in product.properties %}
+                                                    {% if properties_flatten[prop.id].image is not empty %}
+                                                        <img src="{{ host_url("uploads/images/small/" ~ properties_flatten[prop.id].image) }}">
+                                                    {% else %}
+                                                        <h5>{{ properties_flatten[prop.id].name }}</h5>
+                                                    {% endif %}
+                                                    <p>{{ properties_flatten[prop.id].description }}</p>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if testimonials|count > 0 %}
+                                            <div class="tab-pane {{ product.description ? '' : 'active'}} clearfix" id="tab-testimonials">
+                                                {{ testimonials_widget() }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if related|count > 0 %}
+                                <div id="prod-relateds">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h2 class="block-header">
+                                                <span>{{ 'Aproveite Também'|trans({'en':'Related Products'}) }}</span>
+                                            </h2>
+                                        </div>
+                                    </div>
+
+                                    {% for related_product in related|slice(0,3) %}
+                                        <div class="row">
+                                            {{ product_listing.item(related_product, category, 12) }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function change_pic (option) {
+                $variation_photo = $('.opt-' + option);
+                $variation_photo_first = $('.opt-' + option + ':first');
+                $variation_photo_global = $('.opt-no');
+                $variation_not = $('.prod-image-thumbs a');
+
+                $variation_photo_first.trigger('click');
+                $variation_not.hide();
+                $variation_photo.show();
+                $variation_photo_global.show();
+            }
+            $('.prod-variant-btn').click(function(e){
+                change_pic($(this).data('id'));
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(window).load(function() {
+                // The slider being synced must be initialized first
+                $('#carousel').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    directionNav: true,
+                    animationLoop: false,
+                    slideshow: false,
+                    itemWidth: 100,
+                    itemMargin: 10,
+                    asNavFor: '#slider'
+                });
+
+                $('#slider').flexslider({
+                    animation: "slide",
+                    controlNav: false,
+                    directionNav: false,
+                    smoothHeight: true,
+                    animationLoop: false,
+                    slideshow: false,
+                    sync: "#carousel",
+                    start: function(slider){
+                        $('body').removeClass('loading');
+                    }
+                });
+            });
+        </script>
+
+    </div>
+{% endblock %}

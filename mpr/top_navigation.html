@@ -1,0 +1,95 @@
+<div class="col-md-2 hidden-phone">
+    {% 	set socials = {
+        facebook: {link: social_link('facebook'), alt: "Curta nossa página no Facebook"},
+        twitter: {link: social_link('twitter'), alt: "Siga-nos no Twitter"},
+        instagram: {link: social_link('instagram'), alt: "Siga-nos no Instagram"},
+        google: {link: social_link('google'), alt: "Siga-nos no Google"},
+        pinterest: {link: social_link('pinterest'), alt: "Siga-nos no Pinterest"},
+        youtube: {link: social_link('youtube'), alt: "Inscreva-se no Youtube"},
+        }
+    %}
+    <ul class="social">
+    {% for social, attr in socials %}
+        {% if attr.link %}
+        <li>
+            <a class="social-icons" href="{{ attr.link }}" target="_blank">
+                <i class="fa fa-lg fa-fw fa-{{social}}"></i>
+            </a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+    
+<div class="col-xs-2 visible-phone">
+    <button class='menu-abrir'>
+        <span class='line'></span>
+        <span class='line'></span>
+        <span class='line'></span>
+    </button>
+</div>
+    
+    
+<div class="col-md-5 hidden-phone">
+    {% if template_settings('text:t_phone') != "" %}
+        <a href="tel:{{ template_settings('text:t_phone') }}">
+            Fone: {{ template_settings('text:t_phone') }}
+        </a>
+    {% endif %}
+    
+    {% if get_page("contato") %}
+        <a href="/contato" class="fale-conosco">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="3193 16.022 14.703 11.553"><path id="Union_67" data-name="Union 67" class="cls-1" d="M6884.313,22.553A1.316,1.316,0,0,1,6883,21.24V14.725a4.3,4.3,0,0,0,.829.715q2.969,2.017,4.077,2.83c.313.229.564.409.759.538a4.7,4.7,0,0,0,.775.393,2.362,2.362,0,0,0,.9.2h.018a2.366,2.366,0,0,0,.9-.2,4.78,4.78,0,0,0,.775-.393c.194-.128.446-.308.758-.538q1.4-1.01,4.086-2.83a4.525,4.525,0,0,0,.821-.715V21.24a1.318,1.318,0,0,1-1.313,1.313Zm6.04-4.2h-.009a1.276,1.276,0,0,1-.41-.075,2.5,2.5,0,0,1-.472-.221c-.167-.1-.311-.187-.427-.267s-.265-.183-.443-.313-.293-.212-.35-.249q-.746-.525-2.148-1.5t-1.682-1.169a4.078,4.078,0,0,1-.96-.948,1.916,1.916,0,0,1-.451-1.12,1.651,1.651,0,0,1,.34-1.066,1.168,1.168,0,0,1,.972-.427h12.078a1.32,1.32,0,0,1,1.313,1.313,2.171,2.171,0,0,1-.4,1.238,3.869,3.869,0,0,1-1,1.009q-3.086,2.142-3.84,2.668c-.055.037-.172.121-.349.249s-.326.233-.442.313-.261.167-.429.267a2.467,2.467,0,0,1-.471.221,1.268,1.268,0,0,1-.411.075Z" transform="translate(-3690.001 5.021)"/></svg>
+            Fale Conosco
+        </a>
+    {% endif %}
+</div>
+    
+<div class="col-xs-10 col-md-5 d-flex j-content-end align-center">
+    <div class="rastreio hidden-phone"></div>
+    
+    
+    <div class="account-links hidden-phone">
+        <a href="{{ site_url('secure/my_account') }}" class="minha-conta">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="7982.999 1105 16.895 16.894"><path class="a" d="M-11322.548-1095.071v-2.113c0-2.809,5.63-4.221,8.447-4.221s8.447,1.412,8.447,4.221v2.113Zm4.222-12.668a4.225,4.225,0,0,1,4.226-4.225,4.224,4.224,0,0,1,4.221,4.225,4.223,4.223,0,0,1-4.221,4.221A4.224,4.224,0,0,1-11318.326-1107.739Z" transform="translate(19305.548 2216.964)"/></svg>
+            {{ lang('my_account') }}
+        </a>
+    
+        <ul class="list-links">
+            <li>
+                <a href="/secure/my_account/#myorders">Meus Pedidos</a>
+            </li>
+            <li>
+                <a href="/secure/my_account/#mywishlist">Lista de Desejos</a>
+            </li>
+            {% if logged_in %}
+            <li>
+                <a href="{{ site_url('secure/logout') }}">
+                    {{ lang('logout') }}             
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    
+    <div class="visible-phone top-links">
+        <a href="{{ site_url('secure/my_account') }}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="7982.999 1105 16.895 16.894"><path class="a" d="M-11322.548-1095.071v-2.113c0-2.809,5.63-4.221,8.447-4.221s8.447,1.412,8.447,4.221v2.113Zm4.222-12.668a4.225,4.225,0,0,1,4.226-4.225,4.224,4.224,0,0,1,4.221,4.225,4.223,4.223,0,0,1-4.221,4.221A4.224,4.224,0,0,1-11318.326-1107.739Z" transform="translate(19305.548 2216.964)"/></svg>
+        </a>
+        
+        {% if logged_in %}
+          
+            <a href="{{ site_url('secure/logout') }}">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="11387.438 5320 19.601 16"><path id="Union_80" data-name="Union 80" class="cls-1" d="M362.053-1095.964a3.467,3.467,0,0,1-2.544-1.057,3.467,3.467,0,0,1-1.056-2.543v-8.8a3.468,3.468,0,0,1,1.056-2.543,3.467,3.467,0,0,1,2.544-1.056h4a.384.384,0,0,1,.281.119.384.384,0,0,1,.119.281c0,.033,0,.117.012.25a3.251,3.251,0,0,1,.006.331,2.07,2.07,0,0,1-.038.293.411.411,0,0,1-.125.244.375.375,0,0,1-.256.081h-4a1.926,1.926,0,0,0-1.413.588,1.925,1.925,0,0,0-.588,1.412v8.8a1.925,1.925,0,0,0,.588,1.412,1.924,1.924,0,0,0,1.413.588h3.9l.144.013q.144.012.144.037c0,.016.033.039.1.068s.1.067.087.113a.324.324,0,0,0,.025.169c0,.034,0,.117.012.25a3,3,0,0,1,.006.331,2.152,2.152,0,0,1-.037.294.415.415,0,0,1-.125.244.38.38,0,0,1-.256.081Zm7.838-.637a.768.768,0,0,1-.238-.563v-3.6h-5.6a.769.769,0,0,1-.563-.238.767.767,0,0,1-.238-.562v-4.8a.769.769,0,0,1,.238-.562.77.77,0,0,1,.563-.238h5.6v-3.6a.771.771,0,0,1,.237-.563.771.771,0,0,1,.563-.237.769.769,0,0,1,.562.237l6.8,6.8a.77.77,0,0,1,.238.563.769.769,0,0,1-.238.563l-6.8,6.8a.77.77,0,0,1-.563.238A.768.768,0,0,1,369.891-1096.6Z" transform="translate(11028.985 6431.964)"/></svg>            
+            </a>
+        
+        {% endif %}
+    </div>
+           
+        
+    <a href="{{ site_url('cart/view_cart') }}" class="meu-carrinho">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="8140 1105 15.86 16"><path class="a" d="M6886.6,83a1.368,1.368,0,0,1-1.255-.967l-2.333-9.5a.25.25,0,0,1,.254-.324h3.577v.832a1.334,1.334,0,0,0,2.667,0V72.21h2.883v.832a1.333,1.333,0,0,0,2.667,0V72.21h3.54a.25.25,0,0,1,.254.324l-2.332,9.5a1.369,1.369,0,0,1-1.255.967Zm6.461-9.959v-2.6a2.109,2.109,0,0,0-4.217,0v2.6a.667.667,0,0,1-1.333,0v-2.6a3.442,3.442,0,0,1,6.883,0v2.6a.666.666,0,1,1-1.333,0Z" transform="translate(1257 1037.999)"/></svg>
+        <span id="view_cartTotalItens">{% if cart('total_items') %} {{ cart('total_items') }} {% else %} 0 {% endif %} </span> <span id="view_cartTotalValue">{{ cart('total')|format_currency }}</span>
+    </a>
+</div>
