@@ -6,7 +6,10 @@ var ponds = new Array();
     init();
 })();
 
-
+function init(){
+    getAccessToken(callbackAccessToken);
+    startEvents();
+}
 /**
  * Busca a imagem de preview na api do MPR.
  * @param {*} uploadToken 
@@ -82,7 +85,8 @@ function upload(){
         processData: false,  // tell jQuery not to process the data
         contentType: false, 
         success: function (resultToken){
-            //XTECH25
+            $("#idUpload").val(resultToken.token);
+
             //buscando o preview
             getImageMpr(resultToken.token,$("#sku").html(), function(){
                 //fechando o dialog.
@@ -229,10 +233,3 @@ function addAmountPhoto(size){
 function callbackAccessToken(){
     startDialogPhotos();
 }
-function init(){
-    getAccessToken(callbackAccessToken);
-    startEvents();
-    
-}
-
-

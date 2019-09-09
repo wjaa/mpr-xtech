@@ -235,14 +235,18 @@
             							</ul>
             						</div>
             					{% endif %}
-							    {% for option in options %}
+								{% for option in options %}
                                     {% if option.id in product.available_options %}
                                         {% if option.type == 'textarea' %}
                                             <label>{{ option.name }}</label>
                                             <textarea class="form-control" name="option[{{ option.id }}]"></textarea>
-                                        {% elseif option.type == 'textfield' %}
-                                            <label>{{ option.name }}</label>
-                                            <input class="form-control" name="option[{{ option.id }}]">
+										{% elseif option.type == 'textfield' %}
+											{% if option.name == 'idUpload' %}
+												<input id="{{option.name}}" type="hidden" name="option[{{ option.id }}]">
+											{% else %}	
+												<label>{{ option.name }}</label>
+												<input class="form-control" name="option[{{ option.id }}]">
+											{% endif %}	
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
@@ -300,7 +304,7 @@
                             <div class="row">
 								<div class="col-xs-12 clearfix">
 								<!--MPR implementation-->
-									<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#uploadModal" data-backdrop="static" data-keyboard="false">
+									<button type="button" class="btn btn-primary btn-lg btn-enviar-fotos" data-toggle="modal" data-target="#uploadModal" data-backdrop="static" data-keyboard="false">
 										Enviar fotos
 									</button>
 								</div>

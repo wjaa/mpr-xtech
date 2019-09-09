@@ -90,9 +90,23 @@ if ($page == 'product' || $page == 'order_detail') {
     $data['related'] = $data['products'];
 };
 
+
+$data['options'] = array(
+    '80' => array(
+        'id' => '80',
+        'product_id' => '0',
+        'sequence' => '2',
+        'name' => 'idUpload',
+        'type' => 'textfield',
+        'required' => '1',
+        'global' => '1',
+        'site_id' => '9'
+    )
+);   
+
 $data['product'] = array(
     'name' => 'Quadro',
-    'sku' => 'ME469871',
+    'sku' => 'ME505508',
     'saleprice'=>20,
     'price' => 20.99,
     'installments' => 6,
@@ -103,7 +117,22 @@ $data['product'] = array(
         array('filename'=>'500x500', 'alt'=>'Lorem ipsum'),
         array('filename'=>'500x500', 'alt'=>'Lorem ipsum'),
         ),
-    'options' => array(
+    /*'options' => array(
+        '80' => array(
+            'id' => '80',
+            'product_id' => '0',
+            'sequence' => '2',
+            'name' => 'idUpload',
+            'type' => 'textfield',
+            'required' => '1',
+            'global' => '1',
+            'site_id' => '9'
+        )
+    ),*/    
+    'available_options' => array(
+        80,70,40
+    )
+    /*'options' => array(
         '80' => array(
             'id' => '80',
             'product_id' => '0',
@@ -128,7 +157,7 @@ $data['product'] = array(
                 )
             )
         )
-    )
+    )*/
 );
 
 

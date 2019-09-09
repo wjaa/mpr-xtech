@@ -1,3 +1,13 @@
+.btn-enviar-fotos{
+    border-radius: 28px;
+    font-size: 22px;
+    font-weight: 600;
+    padding: 0 10px;
+    margin: 10px 0;
+    max-width: 417px;
+    float: right;
+}
+
 .progress.hide {
     opacity: 0;
     transition: opacity 1.3s;
