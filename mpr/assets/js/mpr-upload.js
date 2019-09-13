@@ -217,16 +217,16 @@ function addAmountPhoto(size){
     var objImagesUpload =  $(".images-upload");
     objImagesUpload.html('');
     if (size == 1){
-        objImagesUpload.append('<div class="col-md-offset-3 col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="3MB" data-max-files="3"accept="image/png, image/jpeg, image/gif"></div>');
+        objImagesUpload.append('<div class="col-md-offset-3 col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="10MB" data-max-files="1"accept="image/png, image/jpeg, image/gif"></div>');
     }else if (size == 2){
-        objImagesUpload.append('<div class="col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="3MB" data-max-files="3"accept="image/png, image/jpeg, image/gif"></div>');
-        objImagesUpload.append('<div class="col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="3MB" data-max-files="3"accept="image/png, image/jpeg, image/gif"></div>');
+        objImagesUpload.append('<div class="col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="10MB" data-max-files="1"accept="image/png, image/jpeg, image/gif"></div>');
+        objImagesUpload.append('<div class="col-md-6"><input type="file" class="filepond" name="imagens" data-max-file-size="10MB" data-max-files="1"accept="image/png, image/jpeg, image/gif"></div>');
     }else if (size > 2 && size <= 9){
         for (x = 0; x < size; x++)
-        objImagesUpload.append('<div class="col-md-4"><input type="file" class="filepond" name="imagens" data-max-file-size="3MB" data-max-files="3"accept="image/png, image/jpeg, image/gif"></div>');
+        objImagesUpload.append('<div class="col-md-4"><input type="file" class="filepond" name="imagens" data-max-file-size="10MB" data-max-files="1"accept="image/png, image/jpeg, image/gif"></div>');
     }else if (size > 9){
         for (x = 0; x < size; x++)
-        objImagesUpload.append('<div class="col-md-3"><input type="file" class="filepond" name="imagens" data-max-file-size="3MB" data-max-files="3"accept="image/png, image/jpeg, image/gif"></div>');
+        objImagesUpload.append('<div class="col-md-3"><input type="file" class="filepond" name="imagens" data-max-file-size="10MB" data-max-files="1"accept="image/png, image/jpeg, image/gif"></div>');
     }
 }
 
