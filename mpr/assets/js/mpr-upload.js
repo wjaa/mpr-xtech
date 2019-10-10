@@ -25,7 +25,45 @@ function getImageMpr(uploadToken,referencia, callback){
             "Authorization" : "Bearer " + token.access_token
         },
         success: function (obj){
-            $(".prod-image > img").attr("src", obj.url);
+            //essa é forma se fosse utilizar direto do componente.
+            //$('#gallery').slick('slickAdd','<div><h3>' + slideIndex + '</h3></div>');
+            try{
+                var a = $("#galleryPreview");
+                var img = $("#galleryPreview img");
+                a.data("image",obj.url)
+                a.data("zoom-image",obj.url)
+                img.attr("src",obj.url)
+                a.show();
+                $("#gallery").slick('slickGoTo',0,true);
+                
+                var zoomConfig = {cursor: "crosshair", easing: true, gallery: 'gallery', galleryActiveClass: 'active'};
+                var zoomImage = $('#zoom')
+                $(a).unbind();
+                a.on('click', function(){
+                    // Remove old instance od EZ
+                    $('.zoomContainer').remove();
+                    zoomImage.removeData('elevateZoom');
+                    // Reinitialize EZ
+                    zoomImage.elevateZoom(zoomConfig);
+                    // Update source for images
+                    setTimeout(function(){
+                        zoomImage.attr('src', obj.url);
+                        zoomImage.data('zoom-image', obj.url);
+                        zoomImage.data('image', obj.url);
+                    },200);
+                }); 
+                a.click();   
+                //MANTER ISSO, POR CAUSA DO BUG DO ELEVATEZOON
+                //elevatezoom tem um bug quando vc altera a galeria.
+                setTimeout(function(){
+                  a.click();
+                },300)
+                
+                
+            }catch(e){
+                console.log(e);
+            }
+            
             callback();
         },
         error: function(e){

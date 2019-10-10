@@ -53,6 +53,9 @@
     margin-right: auto;
     position: relative;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-10%);
+}
+#wait-text{
+    margin-top: -60px;
 }
 

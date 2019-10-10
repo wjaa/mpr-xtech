@@ -50,6 +50,9 @@
 					</div>
 					
 					<div id="gallery" class="prod-image-thumbs">
+						<a id="galleryPreview" style="display: none" href='javascript: void(0);' data-image='' data-zoom-image='' class="opt-no" >
+							<img style="max-width: 75px;" alt="Seu Preview" />
+						</a>
 						{% for image in product.images %}
 							<a href='javascript: void(0);' data-image='{{ theme_upload_url('images/medium/' ~ image.filename) }}' data-zoom-image='{{ theme_upload_url('images/full/' ~ image.filename) }}' class="{% if loop.first %}active{% endif %} opt-{{ image.options|default('no') }}" >
 								<img src='{{ theme_upload_url('images/thumbnails/' ~ image.filename) }}' style="max-width: 75px;" alt="{{ product.name }}" />
@@ -602,6 +605,6 @@
   <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
   <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
   <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
-{{ theme_js("mpr-upload.js?v=4", true) }}
+{{ theme_js("mpr-upload.js?v=5", true) }}
 
 {% endblock %}
