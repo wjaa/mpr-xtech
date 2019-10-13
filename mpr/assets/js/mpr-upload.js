@@ -1,4 +1,14 @@
+/**
+ * TABELA DE ERROS
+ * E:001 - Não foi possivel resgatar o token do servidor.
+ * E:002 - Não foi possivel buscar a quantidade fotos de um produto.
+ * E:003 - A busca de quantidade de fotos retornou um valor inválido. (Provalvemente o cadastro do produto está errado.)
+ * E:004 - IdUpload não está configurado no produto. Veja o cadastro da xtech
+ */
+
+
 var token = {};
+var tokenValidate = {}
 var ponds = new Array();
 
 //onload page
@@ -9,7 +19,11 @@ var ponds = new Array();
 function init(){
     getAccessToken(callbackAccessToken);
     startEvents();
+    if ( $("#idUpload").length < 1){
+        seriousError("E:004 - Esse produto está indisponível no momento.")
+    }
 }
+
 /**
  * Busca a imagem de preview na api do MPR.
  * @param {*} uploadToken 
@@ -36,7 +50,7 @@ function getImageMpr(uploadToken,referencia, callback){
                 a.show();
                 $("#gallery").slick('slickGoTo',0,true);
                 
-                var zoomConfig = {cursor: "crosshair", easing: true, gallery: 'gallery', galleryActiveClass: 'active'};
+                var zoomConfig = {cursor: "crosshair", zoomType	: "inner", easing: true, gallery: 'gallery', galleryActiveClass: 'active'};
                 var zoomImage = $('#zoom')
                 $(a).unbind();
                 a.on('click', function(){
@@ -77,6 +91,17 @@ function getImageMpr(uploadToken,referencia, callback){
  * Envia os arquivos para a api do MPR e recebe um token para gerar o preview.
  */
 function upload(){
+
+    //VERIFICANDO SE O TOKEN EXPIROU, para renovar antes do upload.
+    if (tokenExpired()){
+        getAccessToken(startUpload)
+    }else{
+        startUpload();
+    }
+    
+}
+
+function startUpload(){
     var fileInput = document.getElementsByClassName('filepond--browser');
     var formData = new FormData();
     ponds.forEach(function(pond,index){
@@ -130,7 +155,9 @@ function upload(){
                 //fechando o dialog.
                 $("#uploadModal").modal('toggle'); 
                 //habilitando o botao de comprar novamente.
-                $("#buy-btn").attr("disabled",false);
+                $(".buy-btn-container").show();
+                $(".alterar-fotos").show();
+                $(".btn-enviar-fotos").hide();
                 initStateDialog();
             });
             
@@ -174,9 +201,23 @@ function getAccessToken(callback){
         data: 'grant_type=client_credentials',
         success: function (resultToken){
             token = resultToken;
+            tokenValidate = {expires: token.expires_in, date: new Date()}
+            console.log(tokenValidate)
             callback();
+        },
+        error: function(e){
+            console.log(e);
+            seriousError("E:001 - Esse produto está indisponível no momento.");
         }
     });
+}
+
+function seriousError(msgError){
+    $(".buy-btn-container").hide();
+    $(".alterar-fotos").hide();
+    $(".btn-enviar-fotos").hide();
+    $(".errorMessage").show();
+    $(".errorMessage").html(msgError);
 }
 
 /**
@@ -214,7 +255,9 @@ function startFilePond(){
 }
 
 function startEvents(){
-    $("#buy-btn").attr("disabled",true);
+    $(".buy-btn-container").hide();
+    $(".btn-enviar-fotos").show();
+    $(".alterar-fotos").hide();
     $("#btnUpload").click(function(){
         console.log(token.access_token);
         console.log("iniciando upload");
@@ -231,7 +274,6 @@ function startEvents(){
 function startDialogPhotos(){
     var ref = $("#sku").html();
 
-    
     $.ajax({
         type: "GET",
         url: mprUrl + "/api/v1/core/produto/byRef/" + ref,
@@ -240,12 +282,17 @@ function startDialogPhotos(){
             "Authorization" : "Bearer " + token.access_token
         },
         success: function (obj){
-            addAmountPhoto(obj.qtdeFotos);
-            startFilePond();
+            if (obj == null || obj.qtdeFotos == null || obj.qtdeFotos < 1){
+                seriousError("E:003 - Esse produto está indisponível no momento.");
+            }else{
+                addAmountPhoto(obj.qtdeFotos);
+                startFilePond();
+            }
         },
         error: function(e){
             console.log("Erro ao buscar um produto pelo sua referencia: " + ref);
-            
+            console.log(e);
+            seriousError("E:002 - Esse produto está indisponível no momento.");
         }
     });
 }
@@ -270,4 +317,15 @@ function addAmountPhoto(size){
 
 function callbackAccessToken(){
     startDialogPhotos();
+}
+
+
+function tokenExpired(){
+    //adicionando -120s para ter um tempo de renovar o token.
+    console.log("tokenDate=" + tokenValidate.date)
+    var expiresDate = new Date((tokenValidate.expires*1000) + tokenValidate.date.getTime());
+    console.log("expiresDate=" + expiresDate)
+    var now = new Date();
+    console.log("now=" + now)
+    return expiresDate.getTime() < now.getTime()
 }

@@ -142,6 +142,13 @@
                 }
                 $(this).html(html.replace(part, ''));
             });
+
+            //retirando o idUpload das variacoes do produto.
+            $(".cart-product-name div").each(function (){
+                if ($(this).html().indexOf('idUpload') > -1){
+                    $(this).hide();
+                }
+            });
     	});
     	
         {% if get_collection('shipping_address')|length > 0 %}

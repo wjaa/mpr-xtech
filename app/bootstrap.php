@@ -117,7 +117,7 @@ $data['product'] = array(
         array('filename'=>'500x500', 'alt'=>'Lorem ipsum'),
         array('filename'=>'500x500', 'alt'=>'Lorem ipsum'),
         ),
-    /*'options' => array(
+    'options' => array(
         '80' => array(
             'id' => '80',
             'product_id' => '0',
@@ -128,7 +128,7 @@ $data['product'] = array(
             'global' => '1',
             'site_id' => '9'
         )
-    ),*/    
+    ),
     'available_options' => array(
         80,70,40
     )

@@ -1066,7 +1066,7 @@ section#store-content #product .prod-action .installments-price strong {
 
 section#store-content #product .prod-action .buy-btn {
     border-radius: 28px;
-    background: #54C359;
+    background: #EF6621;
     font-size: 22px;
     font-weight: 600;
     padding: 0 10px;
@@ -1077,7 +1077,7 @@ section#store-content #product .prod-action .buy-btn {
 
 section#store-content #product .prod-action .buy-btn:hover {
     opacity: 1;
-    background: #378e3c;
+    background: #c94706;
 }
 
 section#store-content #product .prod-action .buy-btn .icon {
@@ -1934,7 +1934,8 @@ div#instagram a:hover {
 
 #instagram ul li img {
     -webkit-transition: all .2s ease-out;
-    transition: all .2s ease-out
+    transition: all .2s ease-out;
+    height: 180px !important;
 }
 
 #instagram ul li:hover img {
